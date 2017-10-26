@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/gst-camera.dir/gst-camera.o  -o gst-camera -rdynamic -ljetson-inference 

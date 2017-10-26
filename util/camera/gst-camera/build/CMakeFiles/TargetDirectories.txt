@@ -1,0 +1,3 @@
+/home/nvidia/tegra_multimedia_api/jetson-inference/util/camera/gst-camera/build/CMakeFiles/edit_cache.dir
+/home/nvidia/tegra_multimedia_api/jetson-inference/util/camera/gst-camera/build/CMakeFiles/rebuild_cache.dir
+/home/nvidia/tegra_multimedia_api/jetson-inference/util/camera/gst-camera/build/CMakeFiles/gst-camera.dir

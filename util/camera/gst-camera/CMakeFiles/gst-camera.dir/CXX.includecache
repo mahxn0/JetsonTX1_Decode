@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/nvidia/mxj/jetson-inference/util/camera/gst-camera/gst-camera.cpp
+gstCamera.h
+/home/nvidia/mxj/jetson-inference/util/camera/gst-camera/gstCamera.h
+glDisplay.h
+/home/nvidia/mxj/jetson-inference/util/camera/gst-camera/glDisplay.h
+glTexture.h
+/home/nvidia/mxj/jetson-inference/util/camera/gst-camera/glTexture.h
+stdio.h
+-
+signal.h
+-
+unistd.h
+-
+cudaNormalize.h
+/home/nvidia/mxj/jetson-inference/util/camera/gst-camera/cudaNormalize.h
+

@@ -1,0 +1,3 @@
+/home/nvidia/mxj/jetson-inference/util/camera/gst-camera/CMakeFiles/edit_cache.dir
+/home/nvidia/mxj/jetson-inference/util/camera/gst-camera/CMakeFiles/rebuild_cache.dir
+/home/nvidia/mxj/jetson-inference/util/camera/gst-camera/CMakeFiles/gst-camera.dir
