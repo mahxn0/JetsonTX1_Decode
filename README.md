@@ -1,10 +1,8 @@
 ## This is Decode Demo On Nvidia_TX1
-> git clone from https://github.com/dusty-nv/jetson-inference.git \n
->  remove deepnet test \n
->  gstreamer decode multirtsp from HK ipcamera \n
->  build \n
->  mkdir build \n
->  cd build \n
->  cmake .. \n
->  make -j4 \n
+1. git clone from https://github.com/dusty-nv/jetson-inference.git \n
+2. build
+3.  mkdir build 
+4.  cd build 
+5.  cmake .. 
+6.  make -j4
 
