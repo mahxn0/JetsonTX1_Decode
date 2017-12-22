@@ -1,4 +1,4 @@
-## git clone from https://github.com/dusty-nv/jetson-inference.git#
+## git clone from https://github.com/dusty-nv/jetson-inference.git
 ## remove deepnet test 
 ## gstreamer decode multirtsp from HK ipcamera
 ## build#
