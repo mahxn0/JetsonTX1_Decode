@@ -41,9 +41,7 @@ __constant__ float  constHueColorSpaceMat[9];
 
 __device__ void YUV2RGB(uint32_t *yuvi, float *red, float *green, float *blue)
 {
-   
-
-    // Prepare for hue adjustment
+       // Prepare for hue adjustment
     /*
 	 float luma, chromaCb, chromaCr;
 

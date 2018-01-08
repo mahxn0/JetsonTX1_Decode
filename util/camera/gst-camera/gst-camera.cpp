@@ -1,39 +1,25 @@
-/*
- * Copyright (c) 2017, NVIDIA CORPORATION. All rights reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a
- * copy of this software and associated documentation files (the "Software"),
- * to deal in the Software without restriction, including without limitation
- * the rights to use, copy, modify, merge, publish, distribute, sublicense,
- * and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
- * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
- * DEALINGS IN THE SOFTWARE.
- */
 
 #include "gstCamera.h"
 
 #include "glDisplay.h"
 #include "glTexture.h"
-
+#include <time.h>
 #include <stdio.h>
 #include <signal.h>
 #include <unistd.h>
 #include "loadImage.h"
 #include "cudaNormalize.h"
-
-
+#include "opencv2/opencv.hpp"
+#include "opencv2/highgui/highgui.hpp"
+using namespace cv;
 bool signal_recieved = false;
-
+Mat nv12tomat(unsigned char*yuvdata,unsigned int width,unsigned int height)
+{
+	Mat nv12_img=Mat(height*3/2,width,CV_8UC1,yuvdata);
+	Mat rgb_img;
+	cvtColor(nv12_img,rgb_img,CV_YUV2BGR_NV12);
+	return rgb_img;
+}
 void sig_handler(int signo)
 {
 	if( signo == SIGINT )
@@ -50,7 +36,7 @@ int main( int argc, char** argv )
 
 	for( int i=0; i < argc; i++ )
 		printf("%i [%s]  ", i, argv[i]);
-		
+		  
 	printf("\n");
 	
 		
@@ -60,7 +46,7 @@ int main( int argc, char** argv )
 	/*
 	 * create the camera device
 	 */
-	gstCamera* camera = gstCamera::Create();
+	gstCamera* camera = gstCamera::Create(1920,1080);
 	
 	if( !camera )
 	{
@@ -80,11 +66,12 @@ int main( int argc, char** argv )
 		return 0;
 	}
 	printf("\ngst-camera:  camera open for streaming\n");
-	FILE *fp=fopen("1.yuv","w+");
+	//FILE *fp=fopen("1.yuv","w+");
+	void *imgCUDA=NULL;
+	void *imgCPU=NULL;
 	while(!signal_recieved)
 	{
-		void *imgCPU=NULL;
-		void *imgCUDA=NULL;
+		struct timeval tvs,tve;
 		// get the latest frame
 		if(!camera->Capture(&imgCPU,&imgCUDA,1000))
 		{
@@ -92,8 +79,26 @@ int main( int argc, char** argv )
 		}
 		else
 			printf("gst-camera:  recieved new frame  CPU=0x%p  GPU=0x%p\n",imgCPU,imgCUDA);
-			fwrite(imgCPU,m_Width*m_Height*3/2,1,fp);
-		}	
+			//fwrite(imgCPU,m_Width*m_Height*3/2,1,fp);
+		// if(!camera->ConvertRGBA(imgCUDA,&imgRGBA,1))
+		// {
+		// 	printf("gst-camera:  failed to convert from NV12 to RGBA\n");
+		// }		  
+		//Mat img(1280,720,CV_8U,imgCPU);
+		
+		//nv12tomat((unsigned char *)imgCPU,m_Width,m_Height
+		namedWindow("outimg",CV_WINDOW_AUTOSIZE);
+		double now=gettimeofday(&tvs,NULL);
+		Mat img=nv12tomat((unsigned char *)imgCPU,m_Width,m_Height);
+		gettimeofday(&tve,NULL);
+        double span = tve.tv_sec-tvs.tv_sec + (tve.tv_usec-tvs.tv_usec)/1000000.0;
+		printf("gettimeofday time: %.12f\n",span);
+		imshow("outimg",img);
+		waitKey(1);
+		//printf("img height=%d\n",img.cols);
+		//printf("img width=%d\n",img.rows);
+		//imwrite("1.bmp",img);
+	}
 	//shutdown the camera device
 	if( camera != NULL )
 	{
